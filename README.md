@@ -2,13 +2,15 @@
 
 ***This document is a work in progress.***
 
-What follows below is a set of _recommended coding standards_ for Osprey projects. These guidelines are divided into several sections – general [code formatting and appearance](#code-formatting-and-appearance), [naming conventions](#naming-conventions), [documentation conventions](#documentation-conventions), and [file structure](#file-structure).
+What follows below is a set of *recommended coding standards* for Osprey projects. These guidelines are divided into several sections – general [code formatting and appearance](#code-formatting-and-appearance), [naming conventions](#naming-conventions), [documentation conventions](#documentation-conventions), and [file structure](#file-structure).
 
 In addition to the coding standards, this document describes a variety of [common patterns](#common-patterns) that authors are strongly encouraged to make use of, for consistency other modules.
 
 ## Table of contents
 
 * [Code formatting and appearance](#code-formatting-and-appearance)
+  - [Maximum line length](#maximum-line-length)
+  - [White space](#white-space)
 * [Naming conventions](#naming-conventions)
 * [Documentation conventions](#documentation-conventions)
 * [File structure](#file-structure)
@@ -37,7 +39,7 @@ Long error messages in `throw` statements may cause the line to exceed 120 chara
 
 > Indenting with tabs lets everyone pick their preferred indentation size; aligning with spaces ensures code looks consistent for everyone (assuming a monospace font is in use).
 
-*(Code examples in this document are indented with 2 spaces because most browsers default to 8 spaces for a tab, which is rather unsightly.)*
+*(Code examples in this document are indented with 2 spaces because most browsers default to 8 spaces for a tab, which is rather unsightly. Feel free to consider this an argument in favour of spaces.)*
 
 Example (using `→` to represent a tab):
 
@@ -120,8 +122,6 @@ enum E
 }
 ```
 
-## Around braces
-
 ### Parentheses
 
 **No space after `(` or before `)`.** This includes parenthesized expressions – `a * (b + c)` – as well as parameter and argument lists – `f(a, b, c)`.
@@ -178,7 +178,7 @@ list[i] = list[i - 1];
 
 ### Curly braces
 
-Curly braces are used in two situations: to create hash tables, and to delimit the block of a function member (including [lambda expressions](#lambda-expressions)). Curly braces for function members are generally placed on their own lines; see [Methods](#methods) and [Lambda expressions](#lambda-expressions). The rest of this section deals with hash creation expressions.
+Curly braces are used in three situations: to create hash tables, in member initialisers, and to delimit the block of a function member (including [lambda expressions](#lambda-expressions)). Curly braces for function members are generally placed on their own lines; see [Methods](#methods) and [Lambda expressions](#lambda-expressions). The rest of this section deals with hash creation expressions.
 
 **No space after `{` or before `}`.**
 
@@ -189,12 +189,40 @@ Curly braces are used in two situations: to create hash tables, and to delimit t
 ```
 // Bad:
 var data={ "a": a, "b": b };
+var thing = new Thing with{ value: 4 };
 
 // Good:
 var data = {"a": a, "b": b};
+var thing = new Thing with {value: 4};
 ```
 
-## Blank lines
+### Operators
+
+**White space before and after infix operators.** This applies to *all* infix operators, including `::`, `->` and `**`. Note that member access (`.`) is not an infix operator.
+
+**One space after `not`, no space before.** Even if the thing following `not` begins with punctuation. **No space before or after any other unary operators.** When preceded by an infix operator, the rule about spacing infix operators still applies. Hence, `a + ~b`, not `a +~b`, because infix `+` must have a space after it. But do write `a(~b)`, not `a( ~b)`.
+
+When broken onto multiple lines, **infix operators go at the end** of the first line and subsequent lines are indented the same as the first line, unless stated otherwise.
+
+See also [rules for conditional expressions](#conditional-expressions) (`?:`).
+
+```
+// Bad:
+foo(
+  (bar+baz**2)*quux   and  not
+  unicorn
+);
+bird . chirp( new Volume(- 97), Frequency .high );
+
+// Good:
+foo(
+  (bar + baz ** 2) * quux and
+  not unicorn
+);
+bird.chirp(new Volume(-97), Frequency.high);
+```
+
+### Blank lines
 
 **Blank lines are *blank*.** You may not leave trailing white space on the line. Configure your editor to strip it.
 
@@ -210,7 +238,7 @@ Do not use multiple consecutive blank lines.
 
 **All files end with exactly one newline character,** which your editor may display as a blank line.
 
-## Trailing spaces
+### Trailing spaces
 
 **No.** Configure your editor to strip them. No exceptions.
 
