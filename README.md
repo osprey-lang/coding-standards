@@ -386,7 +386,6 @@ public to(type) { }
 public name() { }
 public serializeAndWriteToStream(stream) { }
 
-
 // Good:
 public convertTo(type) { }
 public getName() { }
@@ -428,7 +427,11 @@ Follow the rules for [field names](#property-and-field-names). Use `lowerCamelCa
 
 ## Keyword escapes
 
-**Use keyword escapes only when necessary.** Usually it is clearer to use a synonym: `type` instead of `\class`; `target` instead of `\for`; `elseClause` instead of just `\else`.
+**Use keyword escapes only when necessary.** Usually it is clearer to use a synonym:
+
+* `type` instead of `\class`;
+* `target` instead of `\for`;
+* `elseClause` instead of just `\else`.
 
 But the feature exists, so don't be afraid to use it if you actually have to.
 
