@@ -465,6 +465,29 @@ The *Param*, *Returns* and *Throws* sections are only applicable to function mem
 
 A well-written summary answers the question "Is this what I'm looking for?". For function members, it also informs the user (roughly) what kind of input is expected.
 
+While a summary should be brief, it is occasionally acceptable to have more than one sentence, when it is necessary to impart additional information without wishing to send the user to the remarks section. For example:
+
+* `aves.Hash` also states: "A key can be any arbitrary value except null."
+* Many of the methods in `io.Stream` say things like: "The method blocks until the data has been written."
+
+For function members, the summary should fill in the sentence "This method/constructor/operator \_\_\_\_". Do not use the imperative, as in "Calculate the frobniz". Do not use negated verb phrases like "Does not ...". Always write about what the function member *does*, not what it *doesn't* do. Note that verbs like "skips", "hides", "closes", "destroys" and similar are not negated; use them when appropriate.
+
+Avoid saying that a function member "Returns *xyz*", or worse, "Returns the result of *verb*ing ...". Use more specific phrasings instead: "Calculates the foo of the first bar", "Reduces the zorp to a florq". It is assumed that a function member returns the result of its calculation.
+
+To describe the inputs to a function member, do not refer to parameter names. The summary should be understandable without looking at the function member's signature. Instead, use the phrasing "the specified ...". Example: "Calculates the absolute value of the specified number".
+
+To refer to the current instance, say "the current instance/sequence/list/hash/...", or simply "this instance/sequence/list/hash/...".
+
+If you employ technical language in the summary, write a [remarks section](#remarks-section) that rephrases the summary in plainer language, and preferably give code examples. See [Remarks section](#remarks-section) for more details.
+
+Some examples:
+
+* "Represents an error that occurs when an I/O operation fails." (`io.IOError`)
+* "Creates a new {Parser} with the specified source file, flags and error manager." (`osprey.compiler.Parser.new`)
+* "Writes the entire byte contents of this stream into the specified destination stream." (`io.Stream.copyTo`)
+
+### Standard summary phrasings
+
 There are certain standard phrasings that are *strongly* recommended:
 
 * Error types: start with "Represents an error that occurs when ...".
@@ -472,27 +495,6 @@ There are certain standard phrasings that are *strongly* recommended:
 * Function members returning a boolean: "Determines whether ...".
 * Property and indexer accessors: "Gets ..." for getters, "Sets ..." for setters. Do not use verbs like "Fetches", "Loads", "Stores", "Saves", or any other alternatives.
 * *(TODO)*
-
-It is occasionally acceptable for a summary to contain more than one sentence, when it is necessary to impart additional information without wishing to send the user to the remarks section. For example:
-
-* `aves.Hash` also sates: "A key can be any arbitrary value except null."
-* Many of the methods in `io.Stream` say things like: "The method blocks until the data has been written."
-
-For function members, the summary should fill in the sentence "This method/constructor/operator \_\_\_\_". Do not use the imperative, as in "Calculate the frobniz". Do not use negated verb phrases like "Does not ...". Always write about what the function member *does*, not what it *doesn't* do. Note that verbs like "skips", "hides", "closes", "destroys" and similar are not negated; use them when appropriate.
-
-Avoid saying that a function member "Returns *x*", or worse, "Returns the result of *verb*ing ...". Use more specific phrasings instead: "Calculates the foo of the first bar", "Reduces the zorp to a florq". It is assumed that a function member returns the result of its calculation.
-
-To describe the inputs to a function member, do not refer to parameter names. The summary should be understandable without looking at the function member's signature. Instead, use the phrasing "the specified ...". Example: "Calculates the absolute value of the specified number".
-
-To refer to the current instance, say "the current instance/sequence/list/hash/...", or simply "this instance/sequence/list/hash/...".
-
-If you employ technical language in the summary, write a [remarks section](#remarks-section) that rephrases the summary in plainer language, and preferably give code examples.  See [Remarks section](#remarks-section) for more details.
-
-Some examples:
-
-* "Represents an error that occurs when an I/O operation fails." (`io.IOError`)
-* "Creates a new {Parser} with the specified source file, flags and error manager." (`osprey.compiler.Parser.new`)
-* "Writes the entire byte contents of this stream into the specified destination stream." (`io.Stream.copyTo`)
 
 ## Param section
 
