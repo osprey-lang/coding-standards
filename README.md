@@ -440,6 +440,64 @@ But the feature exists, so don't be afraid to use it if you actually have to.
 
 **Document public and protected members,** and ideally everything else too. Documentation exists to help you and your users alike. Osprey has documentation comments for a reason. *Use them.*
 
+**Always strive for clarity.** Conciseness at the cost of clarity is worthless; verbose word salad equally so. A perfectly technically accurate phrasing that almost no one understands must be rewritten. A ten-page essay that says nothing must be significantly shortened. The purpose of documentation is to *communicate and inform*. If your documentation fails to do that, rework it.
+
+**Speak in positive, direct and honest terms:**
+
+* Describe what the member *does*, not what it *doesn't* do.
+* Avoid excessive formalities and verbosity. Say what is necessary; no more, no less.
+* Do not suggest emotion or intention where there is neither. A network error doesn't occur because "The OS felt like closing the socket"; it occurs because "The socket was closed by the OS".
+* Do not act apologetic (or insulting) about possible error conditions. A method throws an `ArgumentNullError` when "`value` is null", not because "You were stupid enough to pass null into `value`", nor because "Sorry, `value` can't be null :(".
+
+A documentation comment is made up of several sections, always in this order:
+
+* [Summary](#summary-section) – brief description
+* [Param x](#param-section) – one for each parameter
+* [Returns](#returns-section) – return value
+* [Throws x](#throws-section) – one for each error thrown by the method
+* [Remarks](#remarks-section) – detailed information
+
+The *Param*, *Returns* and *Throws* sections are only applicable to function members.
+
+## Summary section
+
+**A brief description of the member.** A single sentence (or, in the case of methods, sentence fragment) that describes what the member is or does. Avoid code references in the summary. End the summary with a full stop.
+
+A well-written summary answers the question "Is this what I'm looking for?". For function members, it also informs the user (roughly) what kind of input is expected.
+
+There are certain standard phrasings that are *strongly* recommended:
+
+* Error types: start with "Represents an error that occurs when ...".
+* Constructors: "Creates a new {Type} with ..." (where `Type` is always the name of the containing type).
+* Function members returning a boolean: "Determines whether ...".
+* Property and indexer accessors: "Gets ..." for getters, "Sets ..." for setters. Do not use verbs like "Fetches", "Loads", "Stores", "Saves", or any other alternatives.
+* *(TODO)*
+
+It is occasionally acceptable for a summary to contain more than one sentence, when it is necessary to impart additional information without wishing to send the user to the remarks section. For example:
+
+* `aves.Hash` also sates: "A key can be any arbitrary value except null."
+* Many of the methods in `io.Stream` say things like: "The method blocks until the data has been written."
+
+For function members, the summary should fill in the sentence "This method/constructor/operator \_\_\_\_". Do not use the imperative, as in "Calculate the frobniz". Do not use negated verb phrases like "Does not ...". Always write about what the function member *does*, not what it *doesn't* do. Note that verbs like "skips", "hides", "closes", "destroys" and similar are not negated; use them when appropriate.
+
+Avoid saying that a function member "Returns *x*", or worse, "Returns the result of *verb*ing ...". Use more specific phrasings instead: "Calculates the foo of the first bar", "Reduces the zorp to a florq". It is assumed that a function member returns the result of its calculation.
+
+To describe the inputs to a function member, do not refer to parameter names. The summary should be understandable without looking at the function member's signature. Instead, use the phrasing "the specified ...". Example: "Calculates the absolute value of the specified number".
+
+To refer to the current instance, say "the current instance/sequence/list/hash/...", or simply "this instance/sequence/list/hash/...".
+
+If you employ technical language in the summary, write a [remarks section](#remarks-section) that rephrases the summary in plainer language, and preferably give code examples.  See [Remarks section](#remarks-section) for more details.
+
+Some examples:
+
+* "Represents an error that occurs when an I/O operation fails." (`io.IOError`)
+* "Creates a new {Parser} with the specified source file, flags and error manager." (`osprey.compiler.Parser.new`)
+* "Writes the entire byte contents of this stream into the specified destination stream." (`io.Stream.copyTo`)
+
+## Param section
+
+**Documentation of a parameter,** including its intended use and accepted types.
+
 TODO
 
 
