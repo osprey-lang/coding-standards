@@ -12,6 +12,14 @@ In addition to the coding standards, this document describes a variety of [commo
   - [Maximum line length](#maximum-line-length)
   - [White space](#white-space)
 * [Naming conventions](#naming-conventions)
+  - [Capitalization](#capitalization)
+  - [Abbreviations](#abbreviations)
+  - [Namespace names](#namespace-names)
+  - [Type names](#type-names)
+  - [Method names](#method-names)
+  - [Property and field names](#property-and-field-names)
+  - [Constant names](#constant-names)
+  - [Keyword escapes](#keyword-escapes)
 * [Documentation conventions](#documentation-conventions)
 * [File structure](#file-structure)
 * [Common patterns](#common-patterns)
@@ -21,7 +29,7 @@ In addition to the coding standards, this document describes a variety of [commo
 
 This tends to be the most controversial section by far, so let's just get it over with.
 
-Above all, recognise that *code is read more often than it is written*. Keep it readable. If you return to your code and find that the formatting actively prevents you from understanding it, reformat your code.
+Above all, recognize that *code is read more often than it is written*. Keep it readable. If you return to your code and find that the formatting actively prevents you from understanding it, reformat your code.
 
 ## Maximum line length
 
@@ -178,7 +186,7 @@ list[i] = list[i - 1];
 
 ### Curly braces
 
-Curly braces are used in three situations: to create hash tables, in member initialisers, and to delimit the block of a function member (including [lambda expressions](#lambda-expressions)). Curly braces for function members are generally placed on their own lines; see [Methods](#methods) and [Lambda expressions](#lambda-expressions). The rest of this section deals with hash creation expressions.
+Curly braces are used in three situations: to create hash tables, in member initializers, and to delimit the block of a function member (including [lambda expressions](#lambda-expressions)). Curly braces for function members are generally placed on their own lines; see [Methods](#methods) and [Lambda expressions](#lambda-expressions). The rest of this section deals with hash creation expressions.
 
 **No space after `{` or before `}`.**
 
@@ -242,13 +250,192 @@ Do not use multiple consecutive blank lines.
 
 **No.** Configure your editor to strip them. No exceptions.
 
+***(TODO)***
+
 
 # Naming conventions
 
-TODO
+**Above all, strive for clarity.** The name of your member should be self-explanatory. You can generally assume your user is familiar with domain-specific terminology (but it doesn't hurt to describe more complex subjects in your documentation).
+
+**Use American English spelling.** "Color", not "colour"; "initialize", not "initialise"; "meter", not "metre".
+
+> Using one single consistent spelling makes it easier for everyone.
+
+**Be dull and uncreative.** Don't try to be cute or funny with your names: `getWatcher()` is better than `watchify()`; `makeBold()` says more than `embolden()`.
+
+## Capitalization
+
+**Type names use `UpperCamelCase`. Everything else uses `lowerCamelCase`.** Do not use `UPPER_SNAKE_CASE` for constants. Avoid underscores, except as noted below. Remember that Osprey is a case-sensitive language; be consistent with your capitalization and underscore usage.
+
+If you must use [abbreviations](#abbreviations), follow these two rules:
+
+* If the abbreviation consists of two characters, give them the same capitalization, according to the abbreviation's position in the name: `IOError` (type name), `ioError` (non-type name), `currentOSVersion`.
+* Otherwise, treat it as a regular word. That means capitalize the fist letter only, if it should be capitalized: `HtmlDocument` (type name), `cpuCores` (non-type name), `availableRam` (better: `availableMemory`).
+
+```
+// Bad:
+namespace Acme.Camel;
+
+public class dataContainer
+{
+  public get Important_value = 42;
+
+  public calculate_sum()
+  {
+    var CurrentSum = 0;
+    ...
+  }
+
+  private const MAX_USEFULNESS = 6;
+}
+
+// Good:
+namespace acme.camel;
+
+public class DataContainer
+{
+  public get importantValue = 42;
+
+  public calculateSum()
+  {
+    var currentSum = 0;
+    ...
+  }
+
+  private const maxUsefulness = 6;
+}
+```
+
+## Abbreviations
+
+**Abbreviate only when the meaning is clear,** and even then, do it with caution.
+
+Some abbreviations are known or are expected to be learned by everyone – such as I/O, OS, GC, RAM, CPU, WWW, and so on. These are usually fine to use. Sometimes it may be better to substitute alternative words – "memory" instead of "RAM", "processor" instead of "CPU".
+
+Domain-specific abbreviations must be evaluated on a case-by-case basis. Some guidelines:
+
+* If the abbreviation is widely used and understood within the domain, it is probably OK to use it: `HttpServer` is preferable to `HypertextTransferProtocolServer`.
+* If the expanded phrase is particularly cumbersome, it may be OK to abbreviate it. In a module all about virtual reality integration, `VRHeadset` is better than `VirtualRealityHeadset`.
+
+As a general rule, prefer *not* abbreviating. In particular, **do not abbreviate if it reduces clarity**.
+
+## Namespace names
+
+**Namespace names should generally be single nouns,** but if you need multiple words, use `lowerCamelCase`, not underscores. Prefer nouns. If your namespace contains many members with similar purpose or functionality, consider a plural noun: `util.collections`.
+
+**Use namespaces responsibly.** Not everything needs its own namespace. Small modules can often get away with putting everything in a single namespace. Avoid excessively deep nesting.
+
+**Prefer two or more components,** ideally structured as `<company>.<product>`. If the company and product name are identical, omit one of them. Sometimes `<product>.<subproduct>` is acceptable, e.g. `lua.compiler`. If there is no company name, use a generic category name: `io`, `testing`, `net`, `math`, `graphics`, etc.
+
+Namespaces may be named after commercial products. If the product name uses InterCaps, it is generally best to lowercase the whole name, unless it happens to follow Osprey style already: `google.youtube`; but `apple.iOS` or `apple.ios` (at your discretion). If there is a precedent, follow it.
+
+```
+// Bad:
+namespace Corel.WordPerfect { }
+namespace windowsPhone { }
+namespace company.product.feature.errors.internal.fatal { }
+
+// Good:
+namespace corel.wordperfect { }
+namespace microsoft.windows.phone { }
+namespace company.product.feature { }
+```
+
+## Type names
+
+**Type names are nouns,** or sometimes (rarely) adjectives. The type name succinctly summarizes the type's purpose and functionality. Agent nouns (ones ending in *-er*) are common. Adjectives and other nouns can modify the type name as needed.
+
+Adjective names should be avoided, but are sometimes used, especially for abstract base classes that describe a capability. An example is `Iterable`.
+
+**Use specific names.** Avoid overly general terms, except if *very* well established: `Socket` is OK, but `Node` is too vague (prefer `XmlNode` or `ParseNode` or `RedBlackTreeNode`).
+
+**Do not rely on the containing namespace as a sufficient qualifier of your type name.** It is common practice to import all members from a namespace. Your type name should be understandable without namespace qualifier. This also makes it easier to use your type together with similarly-named types from other modules.
+
+Enum sets primarily use plural nouns, since values of such types represent the combination of multiple options.
+
+```
+// Bad:
+public class Parse { }
+public class ThrowErrors { }
+public enum set FlagsForTheEncoder { }
+
+// Good:
+public class Parser { }
+public class ErrorHelpers { }
+public enum set EncoderFlags { }
+
+// Better:
+public class PythonParser { }
+```
+
+## Method names
+
+**Methods use verbs or verb phrases.** The name of the method succinctly describes what the method does. If you find yourself using "and" in the method name, it should probably be two methods.
+
+Sometimes verbs can be elided. If there is a strong convention and the meaning is clear enough, you might get away with omitting the verb. Example: `MyType.createFromString()` would more conventionally be `MyType.fromString()` (or perhaps even better, `MyType.parse()`).
+
+It may be unclear whether a method acts on itself or takes an argument to do things to. Since unnecessary state should be avoided, most methods will act on their arguments. In the case of ambiguity, make it clear that the method expects an argument: `saveTo(fileName)` instead of `save(fileName)`; `writeText(value)` instead of `write(value)`. Do this within reason.
+
+Do not use methods to obtain read-only values. Declare a read-only property instead.
+
+If several public methods call through to a common internal method, name it after the public method plus the suffix `Internal` or `Inner` (at your discretion). Do not use an underscore prefix.
+
+```
+// Bad:
+public to(type) { }
+public name() { }
+public serializeAndWriteToStream(stream) { }
+
+
+// Good:
+public convertTo(type) { }
+public getName() { }
+public writeSerialized(stream) { }
+
+// Better:
+public get name { }
+```
+
+## Property and field names
+
+**Properties and fields use nouns or noun phrases.** The name should typically be able to fill in the blank in "this is the object/type's \_\_\_\_" or "these are the object/type's \_\_\_\_".
+
+The size of a collection is called `length`. (Also consider inheriting from `aves.Collection` whenever possible.)
+
+If the member contains the number of something, call it `somethingCount`, not alternatives like `somethingLength`, `somethingNumber` or `numOfSomething`. But note: on its own, `count` is treated as a verb. Also note: `obj.children.length` is preferable to `obj.childCount`; expose collections when you can.
+
+Backing fields for properties are named after the property, with a leading underscore. Other fields, even when private, should not be underscore-prefixed.
+
+```
+// Bad:
+public get number_of_nodes { }
+private __superSecretValue__;
+
+private val;
+public get value = val;
+
+// Good:
+public get nodeCount { }
+private superSecretValue;
+
+private _value;
+public get value = _value;
+```
+
+## Constant names
+
+Follow the rules for [field names](#property-and-field-names). Use `lowerCamelCase`, not `UPPER_SNAKE_CASE`.
+
+## Keyword escapes
+
+**Use keyword escapes only when necessary.** Usually it is clearer to use a synonym: `type` instead of `\class`; `target` instead of `\for`; `elseClause` instead of just `\else`.
+
+But the feature exists, so don't be afraid to use it if you actually have to.
 
 
 # Documentation conventions
+
+**Document public and protected members,** and ideally everything else too. Documentation exists to help you and your users alike. Osprey has documentation comments for a reason. *Use them.*
 
 TODO
 
