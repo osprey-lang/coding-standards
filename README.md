@@ -208,15 +208,15 @@ See also [rules for conditional expressions](#conditional-expressions) (`?:`).
 
 ```
 // Bad:
-foo(
-  (bar+baz**2)*quux   and  not
+bird=foo(
+  quux*(bar+baz**2)and not
   unicorn
 );
 bird . chirp( new Volume(- 97), Frequency .high );
 
 // Good:
-foo(
-  (bar + baz ** 2) * quux and
+bird = foo(
+  quux * (bar + baz ** 2) and
   not unicorn
 );
 bird.chirp(new Volume(-97), Frequency.high);
